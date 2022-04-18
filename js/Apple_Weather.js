@@ -13,7 +13,7 @@ let { body } = $response;
 !(async () => {
 	// const { Settings } = await setENV("iRingo", url, DataBase);
 	setENV("iRingo", url, DataBase).then(response => {
-		$.log(`🚧 ${$.name}, setENV = ${response}`);
+		$.log(`🚧 ${$.name}, setENV = ${JSON.stringify(response)}`);
 	});
 	const Settings = $.getjson("iRingo", DataBase).Weather;
 	let data = JSON.parse(body);
@@ -62,7 +62,8 @@ let { body } = $response;
 
 				// $.log(`🚧 ${$.name}, type: ${returnedData}`, "");
 
-				var Station = {};
+				// Empty for URL
+				var Station = { now: { country: "" } };
 
 				var AQI = {
 					city: {
@@ -430,6 +431,7 @@ async function outputData(api, now, obs, data, Settings) {
 		weather.airQuality.metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', api);
 		weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 	}
+	$.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, "");
 	$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
 	return weather
 };
