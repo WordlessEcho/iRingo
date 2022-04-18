@@ -41,6 +41,10 @@
 						{
 							"key": "WAQI Private",
 							"label": "waqi.info 私有API"
+						},
+						{
+							"key": "Colorful Clouds Public",
+							"label": "彩云天气公共API"
 						}
 					],
 					"desc": "没有申请自己Token的只能使用\"公共API\""
