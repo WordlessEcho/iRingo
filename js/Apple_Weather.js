@@ -44,7 +44,8 @@ let { body } = $response;
 				// const Headers = Settings?.ColorfulClouds?.Headers;
 
 				// TODO: detect language
-				const providerName = navigator.language === "zh_CN" ? "彩云天气" : "ColorfulClouds Weather";
+				// const providerName = navigator.language === "zh_CN" ? "彩云天气" : "ColorfulClouds Weather";
+				const providerName = "彩云天气";
 				// Opening map on phone will be redirected to weather page
 				const weatherMap = `https://caiyunai.com/map/#${Parameter.lng},${Parameter.lat}`;
 				const returnedData = await ColorfulClouds(
@@ -301,8 +302,9 @@ async function ColorfulClouds(
 					 `weather?alert=true&dailysteps=1&hourlysteps=24` +
 					 // TODO: use units from system settings
 					 // `&unit=${ $.? }`
-					 `${ timestamp !== null ? `&begin=${timestamp}` : '' }` +
-					 `&lang=${ navigator.language }`,
+					 `${ timestamp !== null ? `&begin=${timestamp}` : '' }`,
+					// TODO: detect language
+					//  `&lang=${ navigator.language }`,
 		"headers": headers,
 	};
 
