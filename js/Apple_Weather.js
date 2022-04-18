@@ -296,6 +296,7 @@ async function ColorfulClouds(
 	input = { lat: 0, lng: 0, token: "TAkhjf8d1nlSlspN" },
 	timestamp = null,
 ) {
+	$.log(`🚧 ${$.name}, input = ${JSON.stringify(input)}`, "");
 	// Build request
 	const request = {
 		"url": `https://api.caiyunapp.com/v2.5/` +
@@ -309,6 +310,8 @@ async function ColorfulClouds(
 					//  `&lang=${ navigator.language }`,
 		"headers": headers,
 	};
+
+	$.log(`🚧 ${$.name}, request = ${JSON.stringify(request)}`, "");
 
 	// API Document
 	// https://docs.caiyunapp.com/docs/introreturn
