@@ -88,7 +88,7 @@ let { body } = $response;
 													`returnedData = ${JSON.stringify(returnedData)}`);
 				}
 			// }
-			$.log(`🚧 ${$.name}, Station = ${Station}, AQI = ${AQI}`, "");
+			$.log(`🚧 ${$.name}, Station = ${JSON.stringify(Station)}, AQI = ${JSON.stringify(AQI)}`, "");
 
 			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
 		} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
