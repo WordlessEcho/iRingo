@@ -25,20 +25,20 @@ let { body } = $response;
 				const Token = await WAQI("Token", { idx: idx });
 				//var NOW = await WAQI("NOW", { token:Token, idx: idx });
 				var AQI = await WAQI("AQI", { token: Token, idx: idx });
-			} else if (Settings.Mode == "WAQI Private") {
-				$.log(`🚧 ${$.name}, 工作模式: waqi.info 私有API`, "")
-				const Token = Settings?.Verify?.Content;
-				if (Settings.Location == "Station") {
-					$.log(`🚧 ${$.name}, 定位精度: 观测站`, "")
-					var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
-					var AQI = await WAQI("StationFeed", { token: Token, idx: idx });
-				} else if (Settings.Location == "City") {
-					$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
-					var AQI = await WAQI("CityFeed", { token: Token, lat: Parameter.lat, lng: Parameter.lng });
-				}
+			// } else if (Settings.Mode == "WAQI Private") {
+			// 	$.log(`🚧 ${$.name}, 工作模式: waqi.info 私有API`, "")
+			// 	const Token = Settings?.Verify?.Content;
+			// 	if (Settings.Location == "Station") {
+			// 		$.log(`🚧 ${$.name}, 定位精度: 观测站`, "")
+			// 		var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
+			// 		var AQI = await WAQI("StationFeed", { token: Token, idx: idx });
+			// 	} else if (Settings.Location == "City") {
+			// 		$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
+			// 		var AQI = await WAQI("CityFeed", { token: Token, lat: Parameter.lat, lng: Parameter.lng });
+			// 	}
 				// Although I don't know why not use `===`
-			} else if (Settings.Mode == "Colorful Clouds Public") {
-				$.log(`🚧 ${$.name}, 工作模式: 彩云天气公共API`, "");
+			} else if (Settings.Mode == "WAQI Private") {
+				$.log(`🚧 ${$.name}, 工作模式: 彩云天气私有API`, "");
 				const Token = Settings?.Verify?.Content;
 				// TODO
 				// const Headers = Settings?.ColorfulClouds?.Headers;
