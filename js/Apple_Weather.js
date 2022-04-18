@@ -59,6 +59,8 @@ let { body } = $response;
 
 				$.log(`🚧 ${$.name}, type: ${returnedData}`, "");
 
+				var Station = {};
+
 				var AQI = {
 					city: {
 						name: providerName,
