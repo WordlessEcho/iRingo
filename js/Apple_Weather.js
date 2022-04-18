@@ -46,7 +46,7 @@ let { body } = $response;
 				const providerName = navigator.language === "zh_CN" ? "彩云天气" : "ColorfulClouds Weather";
 				// Opening map on phone will be redirected to weather page
 				const weatherMap = `https://caiyunai.com/map/#${Parameter.lng},${Parameter.lat}`;
-				const data = await ColorfulClouds(
+				const returnedData = await ColorfulClouds(
 					// headers = Headers,
 					input = { token: Token, lat: Parameter.lat, lng: Parameter.lng },
 					// TODO: compare yestarday AQI
@@ -61,22 +61,22 @@ let { body } = $response;
 					iaqi: {},
 					aqi: null,
 					time: {
-						v: data?.server_time,
-						iso: new Date.toISOString(data?.server_time),
+						v: returnedData?.server_time,
+						iso: new Date.toISOString(returnedData?.server_time),
 					},
 					attributions: [
 						{ url: weatherMap, name: providerName },
 					],
 				};
 
-				if (data?.status === "ok") {
-					const result = data.result;
+				if (returnedData?.status === "ok") {
+					const result = returnedData.result;
 
 					AQI.iaqi = result.airQuality;
 					AQI.aqi = result.airQuality.aqi.usa;
 				} else {
 					throw new Error(`❗️ ${$.name}, 彩云天气：未能获取数据 ` +
-													`data = ${JSON.stringify(data)}`);
+													`returnedData = ${JSON.stringify(returnedData)}`);
 				}
 			};
 			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
