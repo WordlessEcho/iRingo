@@ -74,8 +74,8 @@ let { body } = $response;
 				if (returnedData?.status === "ok") {
 					const result = returnedData.result;
 
-					AQI.iaqi = result.realtime.airQuality;
-					AQI.aqi = result.realtime.airQuality.aqi.usa;
+					AQI.iaqi = result.realtime.air_quality;
+					AQI.aqi = result.realtime.air_quality.aqi.usa;
 				} else {
 					throw new Error(`❗️ ${$.name}, 彩云天气：未能获取数据 ` +
 													`returnedData = ${JSON.stringify(returnedData)}`);
