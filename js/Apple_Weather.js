@@ -64,7 +64,7 @@ let { body } = $response;
 					aqi: null,
 					time: {
 						v: returnedData?.server_time,
-						iso: new Date.toISOString(returnedData?.server_time),
+						iso: (new Date()).toISOString(returnedData?.server_time),
 					},
 					attributions: [
 						{ url: weatherMap, name: providerName },
