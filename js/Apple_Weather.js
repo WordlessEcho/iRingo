@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather");
+const $ = new Env("Apple_Weather");
 const DataBase = {
 	Settings: {"Weather":{"Mode":"WAQI Private","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"}}
 };
@@ -298,7 +298,7 @@ async function ColorfulClouds(
 	// Build request
 	const request = {
 		"url": `https://api.caiyunapp.com/v2.5/` +
-					 `${ input.token ? input.token : "TAkhjf8d1nlSlspN" }/` +
+					 `${ input.token !== null ? input.token : "TAkhjf8d1nlSlspN" }/` +
 					 `${input.lng},${input.lat}/` +
 					 `weather?alert=true&dailysteps=1&hourlysteps=24` +
 					 // TODO: use units from system settings
