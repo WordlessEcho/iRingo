@@ -11,9 +11,10 @@ let { body } = $response;
 
 /***************** Processing *****************/
 !(async () => {
-	const { Settings } = await setENV("iRingo", url, DataBase);
+	// const { Settings } = await setENV("iRingo", url, DataBase);
+	const Settings = $.getjson("iRingo", DataBase);
 	let data = JSON.parse(body);
-	$.log(`🚧 ${$.name}, Env = ${JSON.stringify(Settings)}`, "");
+	$.log(`🚧 ${$.name}, Settings = ${JSON.stringify(Settings)}`, "");
 	if (/\/(v1|v2)\/weather\//.test(url)) {
 		const Status = await getStatus(data);
 		if (Status == true) {
