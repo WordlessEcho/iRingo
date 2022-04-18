@@ -4,7 +4,7 @@ README:https://github.com/VirgilClyne/iRingo
 
 const $ = new Env("Apple Weather v2.3.0");
 const DataBase = {
-	Settings: {"Weather":{"Mode":"WAQI Public","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"}}
+	Settings: {"Weather":{"Mode":"WAQI Private","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"}}
 };
 const { url } = $request;
 let { body } = $response;
