@@ -57,7 +57,7 @@ let { body } = $response;
 					// TODO: compare yestarday AQI
 				);
 
-				$.log(`🚧 ${$.name}, type: ${returnedData}`, "");
+				// $.log(`🚧 ${$.name}, type: ${returnedData}`, "");
 
 				var Station = {};
 
@@ -88,6 +88,8 @@ let { body } = $response;
 													`returnedData = ${JSON.stringify(returnedData)}`);
 				}
 			// }
+			$.log(`🚧 ${$.name}, Station = ${Station}, AQI = ${AQI}`, "");
+
 			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
 		} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
 	} else if (/\/(v1|v2)\/availability\//.test(url)) {
