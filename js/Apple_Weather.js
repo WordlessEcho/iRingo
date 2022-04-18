@@ -2,7 +2,7 @@
 README:https://github.com/VirgilClyne/iRingo
 */
 
-const $ = new Env("Apple Weather v2.3.0");
+const $ = new Env("Apple Weather");
 const DataBase = {
 	Settings: {"Weather":{"Mode":"WAQI Private","Location":"Station","Verify":{"Mode":"Token","Content":null},"Scale":"EPA_NowCast.2201"}}
 };
