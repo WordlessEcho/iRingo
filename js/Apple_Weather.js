@@ -35,6 +35,49 @@ let { body } = $response;
 					$.log(`🚧 ${$.name}, 定位精度: 城市`, "")
 					var AQI = await WAQI("CityFeed", { token: Token, lat: Parameter.lat, lng: Parameter.lng });
 				}
+				// Although I don't know why not use `===`
+			} else if (Settings.Mode == "Colorful Clouds Public") {
+				$.log(`🚧 ${$.name}, 工作模式: 彩云天气公共API`, "");
+				const Token = Settings?.Verify?.Content;
+				// TODO
+				// const Headers = Settings?.ColorfulClouds?.Headers;
+
+				// TODO: detect language
+				const providerName = navigator.language === "zh_CN" ? "彩云天气" : "ColorfulClouds Weather";
+				// Opening map on phone will be redirected to weather page
+				const weatherMap = `https://caiyunai.com/map/#${Parameter.lng},${Parameter.lat}`;
+				const data = await ColorfulClouds(
+					// headers = Headers,
+					input = { token: Token, lat: Parameter.lat, lng: Parameter.lng },
+					// TODO: compare yestarday AQI
+				);
+
+				var AQI = {
+					city: {
+						name: providerName,
+						url: weatherMap,
+						geo: [Parameter.lng, Parameter.lat],
+					},
+					iaqi: {},
+					aqi: null,
+					time: {
+						v: data?.server_time,
+						iso: new Date.toISOString(data?.server_time),
+					},
+					attributions: [
+						{ url: weatherMap, name: providerName },
+					],
+				};
+
+				if (data?.status === "ok") {
+					const result = data.result;
+
+					AQI.iaqi = result.airQuality;
+					AQI.aqi = result.airQuality.aqi.usa;
+				} else {
+					throw new Error(`❗️ ${$.name}, 彩云天气：未能获取数据 ` +
+													`data = ${JSON.stringify(data)}`);
+				}
 			};
 			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
 		} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
@@ -229,6 +272,69 @@ async function WAQI(type = "", input = {}) {
 		});
 	};
 };
+
+
+/**
+ * ColorfulClouds
+ * @author WordlessEcho
+ * @param {object} headers - HTTP headers
+ * @param {Object} input - location & token: { lat, lng, token }
+ * @param {Number} timestamp - get old data
+ * @return {Promise<*>}
+ */
+async function ColorfulClouds(
+	headers = {
+		"Content-Type": "application/x-www-form-urlencoded",
+		"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1_1 like Mac OS X) " +
+									"AppleWebKit/605.1.15 (KHTML, like Gecko) " +
+									"Version/15.1 Mobile/15E148 Safari/604.1",
+	},
+	// Colorful Clouds example token
+	input = { lat: 0, lng: 0, token: "TAkhjf8d1nlSlspN" },
+	timestamp = null,
+) {
+	// Build request
+	const request = {
+		"url": `https://api.caiyunapp.com/v2.5/` +
+					 `${token}/${input.lng},${input.lat}/` +
+					 `weather?alert=true&dailysteps=1&hourlysteps=24` +
+					 // TODO: use units from system settings
+					 // `&unit=${ $.? }`
+					 `${ timestamp !== null ? `&begin=${timestamp}` : '' }` +
+					 `&lang=${ navigator.language }`,
+		"headers": headers,
+	};
+
+	// API Document
+	// https://docs.caiyunapp.com/docs/introreturn
+	return new Promise(resolve => {
+		$.get(request, (error, response, data) => {
+			try {
+				const _data = JSON.parse(data);
+
+				if (error) { 
+					throw new Error(error);
+				} else if (data) {
+					$.log(`🎉 ${$.name}, ColorfulClouds: 获取完成`,
+								`timestamp = ${timestamp}`,
+								`data = ${_data}`, '');
+					resolve(_data);
+				}
+			} catch (e) {
+				$.logErr(`❗️${$.name}, ColorfulClouds: 无法获取数据 `,
+								 `request = ${JSON.stringify(request)}`,
+								 `error = ${error || e} `,
+								 `response = ${JSON.stringify(response)} `,
+								 `data = ${data}`, '');
+			} finally {
+				$.log(`🚧 ${$.name}, ColorfulClouds: ${type}调试信息 `,
+							` request = ${JSON.stringify(request)} `,
+							`data = ${data}`, '');
+				resolve();
+			}
+		});
+	});
+}
 
 // Output Data
 async function outputData(api, now, obs, data, Settings) {
