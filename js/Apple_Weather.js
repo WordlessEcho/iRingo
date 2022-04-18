@@ -12,7 +12,7 @@ let { body } = $response;
 /***************** Processing *****************/
 !(async () => {
 	// const { Settings } = await setENV("iRingo", url, DataBase);
-	const Settings = { weather } = $.getjson("iRingo", DataBase);
+	const Settings = { Weather } = $.getjson("iRingo", DataBase);
 	let data = JSON.parse(body);
 	$.log(`🚧 ${$.name}, Settings = ${JSON.stringify(Settings)}`, "");
 	if (/\/(v1|v2)\/weather\//.test(url)) {
