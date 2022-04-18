@@ -321,7 +321,7 @@ async function ColorfulClouds(
 				} else if (data) {
 					$.log(`🎉 ${$.name}, ColorfulClouds: 获取完成`,
 								`timestamp = ${timestamp}`,
-								`data = ${_data}`, '');
+								`data = ${JSON.stringify(_data)}`, '');
 					resolve(_data);
 				}
 			} catch (e) {
