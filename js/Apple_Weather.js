@@ -19,12 +19,12 @@ let { body } = $response;
 		if (Status == true) {
 			$.log(`🎉 ${$.name}, 需要替换AQI`, "");
 			const Parameter = await getParameter(url);
-			if (Settings.Mode == "WAQI Public") {
-				$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
-				var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
-				const Token = await WAQI("Token", { idx: idx });
-				//var NOW = await WAQI("NOW", { token:Token, idx: idx });
-				var AQI = await WAQI("AQI", { token: Token, idx: idx });
+			// if (Settings.Mode == "WAQI Public") {
+			// 	$.log(`🚧 ${$.name}, 工作模式: waqi.info 公共API`, "")
+			// 	var { Station, idx } = await WAQI("Nearest", { api: Parameter.ver, lat: Parameter.lat, lng: Parameter.lng });
+			// 	const Token = await WAQI("Token", { idx: idx });
+			// 	//var NOW = await WAQI("NOW", { token:Token, idx: idx });
+			// 	var AQI = await WAQI("AQI", { token: Token, idx: idx });
 			// } else if (Settings.Mode == "WAQI Private") {
 			// 	$.log(`🚧 ${$.name}, 工作模式: waqi.info 私有API`, "")
 			// 	const Token = Settings?.Verify?.Content;
@@ -37,7 +37,7 @@ let { body } = $response;
 			// 		var AQI = await WAQI("CityFeed", { token: Token, lat: Parameter.lat, lng: Parameter.lng });
 			// 	}
 				// Although I don't know why not use `===`
-			} else if (Settings.Mode == "WAQI Private") {
+			// } else if (Settings.Mode == "WAQI Public") {
 				$.log(`🚧 ${$.name}, 工作模式: 彩云天气私有API`, "");
 				const Token = Settings?.Verify?.Content;
 				// TODO
@@ -79,7 +79,7 @@ let { body } = $response;
 					throw new Error(`❗️ ${$.name}, 彩云天气：未能获取数据 ` +
 													`returnedData = ${JSON.stringify(returnedData)}`);
 				}
-			};
+			// }
 			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
 		} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
 	} else if (/\/(v1|v2)\/availability\//.test(url)) {
