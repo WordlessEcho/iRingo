@@ -48,7 +48,8 @@ let { body } = $response;
 				// Opening map on phone will be redirected to weather page
 				const weatherMap = `https://caiyunai.com/map/#${Parameter.lng},${Parameter.lat}`;
 				const returnedData = await ColorfulClouds(
-					// headers = Headers,
+					// TODO
+					headers = undefined,
 					input = { token: Token, lat: Parameter.lat, lng: Parameter.lng },
 					// TODO: compare yestarday AQI
 				);
