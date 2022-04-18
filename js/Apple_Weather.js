@@ -297,7 +297,8 @@ async function ColorfulClouds(
 	// Build request
 	const request = {
 		"url": `https://api.caiyunapp.com/v2.5/` +
-					 `${token}/${input.lng},${input.lat}/` +
+					 `${ input.token ? input.token : "TAkhjf8d1nlSlspN" }/` +
+					 `${input.lng},${input.lat}/` +
 					 `weather?alert=true&dailysteps=1&hourlysteps=24` +
 					 // TODO: use units from system settings
 					 // `&unit=${ $.? }`
