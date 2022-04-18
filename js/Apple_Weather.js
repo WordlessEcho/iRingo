@@ -12,6 +12,9 @@ let { body } = $response;
 /***************** Processing *****************/
 !(async () => {
 	// const { Settings } = await setENV("iRingo", url, DataBase);
+	setENV("iRingo", url, DataBase).then(response => {
+		$.log(`🚧 ${$.name}, setENV = ${response}`);
+	});
 	const Settings = $.getjson("iRingo", DataBase).Weather;
 	let data = JSON.parse(body);
 	$.log(`🚧 ${$.name}, Settings = ${JSON.stringify(Settings)}`, "");
