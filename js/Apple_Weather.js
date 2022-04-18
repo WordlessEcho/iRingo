@@ -73,8 +73,16 @@ let { body } = $response;
 
 				if (returnedData?.status === "ok") {
 					const result = returnedData.result;
+					const pollutants = [ "pm25", "pm10", "o3", "so2", "no2", "co" ];
+					const pollutantsData = {};
 
-					AQI.iaqi = result.realtime.air_quality;
+					for (const [key, value] of Object.entries(result.realtime.air_quality)) {
+						if (pollutants.includes(key)) {
+							pollutantsData[key] = { v: value };
+						}
+					}
+
+					AQI.iaqi = pollutantsData;
 					AQI.aqi = result.realtime.air_quality.aqi.usa;
 				} else {
 					throw new Error(`❗️ ${$.name}, 彩云天气：未能获取数据 ` +
