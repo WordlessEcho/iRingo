@@ -41,7 +41,7 @@ let { body } = $response;
 			// } else if (Settings.Mode == "WAQI Public") {
 				$.log(`🚧 ${$.name}, 工作模式: 彩云天气私有API`, "");
 				const Token = Settings?.Verify?.Content;
-				$.log(`🚧 ${$.name}, token = ${Token}`, "");
+				// $.log(`🚧 ${$.name}, token = ${Token}`, "");
 				// TODO
 				// const Headers = Settings?.ColorfulClouds?.Headers;
 
@@ -56,6 +56,8 @@ let { body } = $response;
 					input = { token: Token, lat: Parameter.lat, lng: Parameter.lng },
 					// TODO: compare yestarday AQI
 				);
+
+				$.log(`🚧 ${$.name}, type: ${returnedData}`, "");
 
 				var AQI = {
 					city: {
@@ -77,8 +79,8 @@ let { body } = $response;
 				if (returnedData?.status === "ok") {
 					const result = returnedData.result;
 
-					AQI.iaqi = result.realtime.airQuality;
-					AQI.aqi = result.realtime.airQuality.aqi.usa;
+					AQI.iaqi = result.realtime.air_quality;
+					AQI.aqi = result.realtime.air_quality.aqi.usa;
 				} else {
 					throw new Error(`❗️ ${$.name}, 彩云天气：未能获取数据 ` +
 													`returnedData = ${JSON.stringify(returnedData)}`);
@@ -298,7 +300,7 @@ async function ColorfulClouds(
 	input = { lat: 0, lng: 0, token: "TAkhjf8d1nlSlspN" },
 	timestamp = null,
 ) {
-	$.log(`🚧 ${$.name}, input = ${JSON.stringify(input)}`, "");
+	// $.log(`🚧 ${$.name}, input = ${JSON.stringify(input)}`, "");
 	// Build request
 	const request = {
 		"url": `https://api.caiyunapp.com/v2.5/` +
@@ -327,7 +329,7 @@ async function ColorfulClouds(
 				} else if (data) {
 					$.log(`🎉 ${$.name}, ColorfulClouds: 获取完成`,
 								`timestamp = ${timestamp}`,
-								`data = ${JSON.stringify(_data)}`, '');
+								`realtime = ${JSON.stringify(_data?.result?.realtime)}`, '');
 					resolve(_data);
 				}
 			} catch (e) {
