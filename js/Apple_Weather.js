@@ -12,7 +12,7 @@ let { body } = $response;
 /***************** Processing *****************/
 !(async () => {
 	// const { Settings } = await setENV("iRingo", url, DataBase);
-	const Settings = $.getjson("iRingo", DataBase);
+	const Settings = { weather } = $.getjson("iRingo", DataBase);
 	let data = JSON.parse(body);
 	$.log(`🚧 ${$.name}, Settings = ${JSON.stringify(Settings)}`, "");
 	if (/\/(v1|v2)\/weather\//.test(url)) {
@@ -41,6 +41,7 @@ let { body } = $response;
 			// } else if (Settings.Mode == "WAQI Public") {
 				$.log(`🚧 ${$.name}, 工作模式: 彩云天气私有API`, "");
 				const Token = Settings?.Verify?.Content;
+				$.log(`🚧 ${$.name}, token = ${Token}`, "");
 				// TODO
 				// const Headers = Settings?.ColorfulClouds?.Headers;
 
