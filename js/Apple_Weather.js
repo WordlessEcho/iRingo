@@ -503,8 +503,8 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 					// we only have per half hour probability data
 					// convert to percentages
 					"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
-					"precipIntensity": value,
-					"precipIntensityPerceived": value,
+					"precipIntensity": parseFloat(value.toFixed(2)),
+					"precipIntensityPerceived": parseFloat(value.toFixed(3)),
 				});
 			});
 
