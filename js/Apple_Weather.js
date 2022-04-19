@@ -349,16 +349,16 @@ async function outputData(api, now, obs, data, Settings) {
 		};
 
 		summaries.precipChance = 100;
-		summaries.precipIntensity = 5;
+		summaries.precipIntensity = 6;
 
 		weather.forecastNextHour.summary.push(summaries);
 		weather.forecastNextHour.startTime = startTimeIos;
 
 		const startTimeDate = new Date(startTimeIos);
 
-		for (let i = 0; i < 60; i++) {
+		for (let i = 0; i <= 120; i++) {
 			const nextMinuteTime = addMinutes(startTimeDate, i);
-			const value = parseInt(i / 10);
+			const value = parseInt(i / 20);
 
 			weather.forecastNextHour.minutes.push({
 				"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
