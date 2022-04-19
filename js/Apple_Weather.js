@@ -460,19 +460,10 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			weather.forecastNextHour.metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1];
 			weather.forecastNextHour.metadata.providerName = obs?.attributions?.[0]?.name;
 			weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
-			// https://docs.caiyunapp.com/docs/tables/precip/
-			const HEAVY_RAIN_UPPER = 51.30;
-			// the limit of `precipIntensityPerceived`
-			const PERCEIVED_LIMIT = 3;
-			// TODO: is toFixed necessary?
-			const toApplePrecipitation = value => parseFloat(
-				((value * 10000 / HEAVY_RAIN_UPPER * 1000) * PERCEIVED_LIMIT)
-					.toFixed(3)
-			);
-
 			// actually we use mm/hr as unit
 			// it looks like Apple doesn't care this data
-			weather.forecastNextHour.metadata.units = "mm";
+			// weather.forecastNextHour.metadata.units = "m";
+			weather.forecastNextHour.metadata.units = "mmPerHour";
 			weather.forecastNextHour.metadata.version = 2;
 
 			const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
@@ -499,12 +490,21 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 				"condition": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain",
 			};
 
+			// https://docs.caiyunapp.com/docs/tables/precip/
+			const HEAVY_RAIN_UPPER = 51.30;
+			// the limit of `precipIntensityPerceived`
+			const PERCEIVED_LIMIT = 3;
+			// TODO: is toFixed necessary?
+			const toApplePrecipitation = value => parseFloat(
+				((value * 10000 / HEAVY_RAIN_UPPER * 1000) * PERCEIVED_LIMIT)
+					.toFixed(3)
+			);
+
 			if (Math.max(...minutely.probability) > 0) {
 				// convert to percentage
 				summaries.precipChance = parseInt(Math.max(...minutely.probability) * 100);
 				summaries.precipIntensity = Math.max(...minutely.precipitation_2h);
 			}
-
 			weather.forecastNextHour.summary.push(summaries);
 
 			weather.forecastNextHour.startTime = startTimeIos;
@@ -521,7 +521,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 					"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
 					// it looks like Apple doesn't care this data
 					"precipIntensity": value,
-					"precipIntensityPerceived": parseFloat((value * TO_APPLE_DATA).toFixed(3)),
+					"precipIntensityPerceived": toApplePrecipitation(value),
 				});
 			});
 
