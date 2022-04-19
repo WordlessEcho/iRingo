@@ -85,7 +85,7 @@ let { body } = $response;
 					],
 				};
 
-				var Minutely = returnedData?.result?.minutely?.status === "ok" ? returnedData?.minutely : null;
+				var Minutely = returnedData?.result?.minutely?.status === "ok" ? returnedData?.result?.minutely : null;
 
 				if (returnedData?.status === "ok") {
 					const result = returnedData.result;
