@@ -105,7 +105,7 @@ let { body } = $response;
 			// }
 			$.log(`🚧 ${$.name}, Station = ${JSON.stringify(Station)}, AQI = ${JSON.stringify(AQI)}`, "");
 
-			data = await outputData(Parameter.ver, Station, AQI, data, Settings);
+			data = await outputData(Parameter.ver, Station, AQI, Minutely, data, Settings);
 		} else $.log(`🎉 ${$.name}, 无须替换, 跳过`, "");
 	} else if (/\/(v1|v2)\/availability\//.test(url)) {
 		$.log(`🎉 ${$.name}, 可用性检查`, "");
@@ -435,7 +435,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 		weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 
 		// AQI replacement only happened in CN
-		if (minutely !== null) {
+		if (minutely) {
 			$.log(`⚠️ ${$.name}, Detect`, `forecastNextHour data ${$.apiVer}`, '');
       if (!weather.forecastNextHour) {
         $.log(`⚠️ ${$.name}, non-existent forecastNextHour data`, `creating`, '');
