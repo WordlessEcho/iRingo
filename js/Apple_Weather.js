@@ -326,7 +326,8 @@ async function outputData(api, now, obs, data, Settings) {
 		weather.forecastNextHour.metadata.version = 2;
 
 		const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
-		const zeroSecondTime = (new Date(obs?.time?.iso)).setSeconds(0);
+
+		const zeroSecondTime = (new Date()).setSeconds(0);
 		const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
 		const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
@@ -371,7 +372,7 @@ async function outputData(api, now, obs, data, Settings) {
 
 		$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, "");
 	}
-	$.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, '');
+	// $.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, '');
 	$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
 	return weather
 };
