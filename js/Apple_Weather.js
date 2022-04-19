@@ -498,8 +498,9 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 				weather.forecastNextHour.minutes.push({
 					// array starting with zero
 					"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
-					// We only have per half hour probability data
-					"precipChance": value > 0 ? minutely.probability[parseInt(index / 30)] : 0,
+					// we only have per half hour probability data
+					// convert to percentages
+					"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
 					"precipIntensity": value,
 					"precipIntensityPerceived": value,
 				});
