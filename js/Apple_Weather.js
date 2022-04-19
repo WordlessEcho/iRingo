@@ -312,7 +312,7 @@ async function outputData(api, now, obs, data, Settings) {
       }
     }
 
-		weather.forecastNextHour.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);
+		weather.forecastNextHour.metadata.expireTime = convertTime(new Date(), 'add-1h-floor', api);
 		// TODO: language detection
 		// weather.forecastNextHour.metadata.language ? weather.forecastNextHour.metadata.language : weather.currentWeather.metadata.language;
 		weather.forecastNextHour.metadata.language = "zh-CN";
