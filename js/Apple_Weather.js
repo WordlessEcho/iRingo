@@ -330,7 +330,7 @@ async function ColorfulClouds(
 					 `${ input.token !== null ? input.token : "TAkhjf8d1nlSlspN" }/` +
 					 `${input.lng},${input.lat}/` +
 					 // https://docs.caiyunapp.com/docs/tables/unit/
-					 `weather?alert=true&dailysteps=1&hourlysteps=24&unit=SI` +
+					 `weather?alert=true&dailysteps=1&hourlysteps=24&unit=metric:v2` +
 					 `${ timestamp !== null ? `&begin=${timestamp}` : '' }`,
 					// TODO: detect language
 					//  `&lang=${ navigator.language }`,
