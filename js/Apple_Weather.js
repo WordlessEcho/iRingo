@@ -461,6 +461,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			weather.forecastNextHour.metadata.providerName = obs?.attributions?.[0]?.name;
 			weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
 			// TODO
+			// (mm/hr) / 6 = Apple data
 			weather.forecastNextHour.metadata.units = "m";
 			weather.forecastNextHour.metadata.version = 2;
 
@@ -490,7 +491,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 
 			if (Math.max(...minutely.probability) > 0) {
 				summaries.precipChance = parseInt(Math.max(...minutely.probability) * 100);
-				summaries.precipIntensity = parseFloat((Math.max(...minutely.precipitation_2h)).toFixed(2));
+				summaries.precipIntensity = parseFloat((Math.max(...minutely.precipitation_2h) / 6).toFixed(2));
 			}
 
 			weather.forecastNextHour.summary.push(summaries);
@@ -506,8 +507,8 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 					// we only have per half hour probability data
 					// convert to percentages
 					"precipChance": value > 0 ? parseInt(minutely.probability[parseInt(index / 30)] * 100) : 0,
-					"precipIntensity": parseFloat(value.toFixed(2)),
-					"precipIntensityPerceived": parseFloat(value.toFixed(3)),
+					"precipIntensity": parseFloat((value / 6).toFixed(2)),
+					"precipIntensityPerceived": parseFloat((value / 6).toFixed(3)),
 				});
 			});
 
