@@ -153,7 +153,8 @@ async function getParameter(url) {
 async function getStatus(data) {
 	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
 	$.log(`🚧 ${$.name}, ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
-	$.log(`🚧 ${$.name}, airQuality = ${data.air_quality ?? data.airQuality}`, '');
+	$.log(`🚧 ${$.name}, airQuality = ${JSON.stringify(data.air_quality ?? data.airQuality)}`, '');
+	$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(data.forecastNextHour)}`, "");
 	return (result || false)
 };
 
