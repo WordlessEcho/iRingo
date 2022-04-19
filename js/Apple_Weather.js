@@ -496,7 +496,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			const PERCEIVED_LIMIT = 3;
 			// TODO: is toFixed necessary?
 			const toApplePrecipitation = value => parseFloat(
-				((value * 10000 / HEAVY_RAIN_UPPER * 1000) * PERCEIVED_LIMIT)
+				((value * 10000 / (HEAVY_RAIN_UPPER * 1000)) * PERCEIVED_LIMIT)
 					.toFixed(3)
 			);
 
