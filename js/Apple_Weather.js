@@ -453,7 +453,9 @@ async function outputData(api, now, obs, minutely, data, Settings) {
       }
 
 			weather.forecastNextHour.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);
-			weather.forecastNextHour.metadata.language ? weather.forecastNextHour.metadata.language : weather.currentWeather.metadata.language;
+			// TODO: language detection
+			// weather.forecastNextHour.metadata.language ? weather.forecastNextHour.metadata.language : weather.currentWeather.metadata.language;
+			weather.forecastNextHour.metadata.language = "zh-CN";
 			weather.forecastNextHour.metadata.longitude = obs?.city?.geo?.[0] ?? now?.geo?.[0];
 			weather.forecastNextHour.metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1];
 			weather.forecastNextHour.metadata.providerName = obs?.attributions?.[0]?.name;
