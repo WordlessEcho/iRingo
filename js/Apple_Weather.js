@@ -366,7 +366,7 @@ async function outputData(api, now, obs, data, Settings) {
 				// convert to percentages
 				"precipChance": 100,
 				"precipIntensity": 4.13,
-				"precipIntensityPerceived": 3,
+				"precipIntensityPerceived": 3.5,
 			});
 		};
 
