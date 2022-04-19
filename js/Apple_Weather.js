@@ -467,8 +467,10 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			// weather.forecastNextHour.metadata.version = 2;
 
 			const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
-			const nextMinute = new Date(addMinutes((new Date(obs?.time?.iso)).setSeconds(0), 1));
-			const startTimeIos = convertTime(nextMinute, 'remain', api);
+
+			const zeroSecondTime = (new Date(obs?.time?.iso)).setSeconds(0);
+			const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
+			const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
 
 			const conditions = {
 				"startTime": startTimeIos,
@@ -491,9 +493,11 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 
 			const startTimeDate = new Date(startTimeIos);
 			minutely.precipitation_2h.forEach((value, index) => {
+				const nextMinuteTime = addMinutes(startTimeDate, index + 1);
+
 				weather.forecastNextHour.minutes.push({
 					// array starting with zero
-					"startTime": addMinutes(startTimeDate, index + 1),
+					"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
 					// We only have per half hour probability data
 					"precipChance": value > 0 ? minutely.probability[parseInt(index / 30)] : 0,
 					"precipIntensity": value,
