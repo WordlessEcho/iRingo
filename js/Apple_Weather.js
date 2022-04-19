@@ -58,7 +58,10 @@ let { body } = $response;
 					city: {
 						name: providerName,
 						url: weatherMap,
-						geo: [Parameter.lat, Parameter.lng],
+						geo: [
+							returnedData?.location[1] ?? parseFloat(Parameter.lat),
+							returnedData?.location[0] ?? parseFloat(Parameter.lng)
+						],
 					},
 					iaqi: {},
 					aqi: null,
