@@ -358,7 +358,7 @@ async function outputData(api, now, obs, data, Settings) {
 
 		for (let i = 0; i < 60; i++) {
 			const nextMinuteTime = addMinutes(startTimeDate, i);
-			const value = parseInt(i / 8);
+			const value = parseInt(i / 10);
 
 			weather.forecastNextHour.minutes.push({
 				"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
