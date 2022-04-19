@@ -485,7 +485,8 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 
 			const summaries = {
 				"startTime": startTimeIos,
-				"condition": conditions.token,
+				// TODO: type of weather
+				"condition": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain",
 			};
 
 			if (Math.max(...minutely.probability) > 0) {
