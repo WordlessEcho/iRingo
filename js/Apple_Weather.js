@@ -298,6 +298,7 @@ async function outputData(api, now, obs, data, Settings) {
 		weather.airQuality.metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', api);
 		weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
 	}
+	$.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, '');
 	$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
 	return weather
 };
