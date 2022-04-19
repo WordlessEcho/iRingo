@@ -85,6 +85,8 @@ let { body } = $response;
 					],
 				};
 
+				var Minutely = returnedData?.minutely?.status === "ok" ? returnedData?.minutely : null;
+
 				if (returnedData?.status === "ok") {
 					const result = returnedData.result;
 					const pollutants = [ "pm25", "pm10", "o3", "so2", "no2", "co" ];
