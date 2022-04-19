@@ -466,36 +466,40 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			// weather.forecastNextHour.metadata.units = "m";
 			// weather.forecastNextHour.metadata.version = 2;
 
-			const addMinutes = (date, minutes) => (new Date()).setTime(date + (1000 * 60 * minutes));
+			const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
 			const nextMinute = new Date(addMinutes((new Date(obs?.time?.iso)).setSeconds(0), 1));
-			const startTime = convertTime(nextMinute, 'remain', api);
+			const startTimeIos = convertTime(nextMinute, 'remain', api);
 
-			weather.forecastNextHour.condition.startTime = startTime;
-			// TODO: type of weather
-			weather.forecastNextHour.condition.token = minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain.constant";
-			weather.forecastNextHour.condition.longTemplate = minutely.description;
-			// use forecast_keypoint from ColorfulClouds?
-			weather.forecastNextHour.condition.shortTemplate = minutely.description;
-			// weather.forecastNextHour.condition.parameters = {};
+			const conditions = {
+				"startTime": startTimeIos,
+				// TODO: type of weather
+				"token": minutely.precipitation_2h.find(precipitation => precipitation > 0) === undefined ? "clear" : "rain.constant",
+				"longTemplate": minutely.description,
+				// use forecast_keypoint from ColorfulClouds?
+				"shortTemplate": minutely.description,
+				// "parameters": {},
+			};
+			weather.forecastNextHour.condition.push(conditions);
 
-			weather.forecastNextHour.summary.startTime = startTime;
-			weather.forecastNextHour.summary.condition = weather.forecastNextHour.condition.token;
+			const summaries = {
+				"startTime": startTimeIos,
+				"condition": conditions.token,
+			};
+			weather.forecastNextHour.summary.push(summaries);
 
-			weather.forecastNextHour.startTime = startTime;
+			weather.forecastNextHour.startTime = startTimeIos;
 
-			const toIosMinutes = [];
-			const startTimeDate = new Date(startTime);
+			const startTimeDate = new Date(startTimeIos);
 			minutely.precipitation_2h.forEach((value, index) => {
-				toIosMinutes[index] = {
+				weather.forecastNextHour.minutes.push({
 					// array starting with zero
 					"startTime": addMinutes(startTimeDate, index + 1),
 					// We only have per half hour probability data
 					"precipChance": value > 0 ? minutely.probability[parseInt(index / 30)] : 0,
 					"precipIntensity": value,
 					"precipIntensityPerceived": value,
-				};
+				});
 			});
-			weather.forecastNextHour.minutes = toIosMinutes;
 		}
 	}
 	$.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, "");
