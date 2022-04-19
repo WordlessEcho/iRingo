@@ -298,6 +298,79 @@ async function outputData(api, now, obs, data, Settings) {
 		weather.airQuality.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);
 		weather.airQuality.metadata.reportedTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'remain', api);
 		weather.airQuality.metadata.readTime = convertTime(new Date(), 'remain', api);
+
+		$.log(`⚠️ ${$.name}, Detect`, `forecastNextHour data ${$.apiVer}`, '');
+    if (!weather.forecastNextHour) {
+      $.log(`⚠️ ${$.name}, non-existent forecastNextHour data`, `creating`, '');
+      weather.forecastNextHour = {
+        "name": "NextHourForecast",
+        "metadata": {},
+        "condition": [],
+        "summary": [],
+        "startTime": "",
+        "minutes": [],
+      }
+    }
+
+		weather.forecastNextHour.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);
+		// TODO: language detection
+		// weather.forecastNextHour.metadata.language ? weather.forecastNextHour.metadata.language : weather.currentWeather.metadata.language;
+		weather.forecastNextHour.metadata.language = "zh-CN";
+		weather.forecastNextHour.metadata.longitude = obs?.city?.geo?.[0] ?? now?.geo?.[0];
+		weather.forecastNextHour.metadata.latitude = obs?.city?.geo?.[1] ?? now?.geo?.[1];
+		weather.forecastNextHour.metadata.providerName = obs?.attributions?.[0]?.name;
+		weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
+		// TODO
+		// (mm/hr) / 6 = Apple data
+		weather.forecastNextHour.metadata.units = "m";
+		weather.forecastNextHour.metadata.version = 2;
+
+		const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
+		const zeroSecondTime = (new Date(obs?.time?.iso)).setSeconds(0);
+		const nextMinuteWithoutSecond = addMinutes(new Date(zeroSecondTime), 1);
+		const startTimeIos = convertTime(new Date(nextMinuteWithoutSecond), 'remain', api);
+
+		const conditions = {
+			"startTime": startTimeIos,
+			// TODO: type of weather
+			"token": "rain.constant",
+			"longTemplate": "降雨",
+			// use forecast_keypoint from ColorfulClouds?
+			"shortTemplate": "降雨",
+			// TODO: what are parameters?
+			"parameters": {},
+		};
+		weather.forecastNextHour.condition.push(conditions);
+
+		const summaries = {
+			"startTime": startTimeIos,
+			// TODO: type of weather
+			"condition": "rain",
+		};
+
+		summaries.precipChance = 100;
+		summaries.precipIntensity = 5;
+
+		weather.forecastNextHour.summary.push(summaries);
+		weather.forecastNextHour.startTime = startTimeIos;
+
+		const startTimeDate = new Date(startTimeIos);
+
+		for (let i = 0; i < 60; i++) {
+			const nextMinuteTime = addMinutes(startTimeDate, index);
+			const value = parseInt(i / 8);
+
+			weather.forecastNextHour.minutes.push({
+				"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
+				// we only have per half hour probability data
+				// convert to percentages
+				"precipChance": 100,
+				"precipIntensity": value,
+				"precipIntensityPerceived": value,
+			});
+		};
+
+		$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, "");
 	}
 	$.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, '');
 	$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
