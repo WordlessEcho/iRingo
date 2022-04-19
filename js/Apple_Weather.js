@@ -261,7 +261,7 @@ async function outputData(api, now, obs, data, Settings) {
 			weather[`${AQIname}`].sourceType = "station"; //station:监测站 modeled:模型
 		}
 	};
-	$.log(`🚧 ${$.name}, (before) weather = ${JSON.stringify(weather)}`, '');
+	// $.log(`🚧 ${$.name}, (before) weather = ${JSON.stringify(weather)}`, '');
 	// 注入数据
 	//条件运算符 & 可选链操作符
 	weather[`${AQIname}`].source = obs?.city?.name ?? now?.name ?? now?.u ?? now?.nna ?? now?.nlo;
