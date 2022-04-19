@@ -505,9 +505,10 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 					"precipIntensityPerceived": value,
 				});
 			});
+
+			$.log(`🚧 ${$.name}, forecastNextHour = ${JSON.stringify(weather.forecastNextHour)}`, "");
 		}
 	}
-	$.log(`🚧 ${$.name}, weather = ${JSON.stringify(weather)}`, "");
 	$.log(`🎉 ${$.name}, ${outputData.name}完成`, '');
 	return weather
 };
