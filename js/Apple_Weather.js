@@ -481,7 +481,8 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 				"longTemplate": minutely.description,
 				// use forecast_keypoint from ColorfulClouds?
 				"shortTemplate": minutely.description,
-				// "parameters": {},
+				// TODO: what are parameters?
+				"parameters": {},
 			};
 			weather.forecastNextHour.condition.push(conditions);
 
