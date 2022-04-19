@@ -498,10 +498,9 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 
 			const startTimeDate = new Date(startTimeIos);
 			minutely.precipitation_2h.forEach((value, index) => {
-				const nextMinuteTime = addMinutes(startTimeDate, index + 1);
+				const nextMinuteTime = addMinutes(startTimeDate, index);
 
 				weather.forecastNextHour.minutes.push({
-					// array starting with zero
 					"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
 					// we only have per half hour probability data
 					// convert to percentages
