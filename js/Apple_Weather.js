@@ -12,6 +12,7 @@ let { body } = $response;
 /***************** Processing *****************/
 !(async () => {
 	const { Settings } = await setENV("iRingo", url, DataBase);
+	$.log(`🚧 ${$.name}, Settings = ${Settings}`, "");
 	let data = JSON.parse(body);
 	if (/\/(v1|v2)\/weather\//.test(url)) {
 		const Status = await getStatus(data);
@@ -58,7 +59,7 @@ let { body } = $response;
  * @param {Object} s - Default DataBase
  * @return {Promise<*>}
  */
-async function setENV(t,e,s){const i=/weather-(.*)\.apple\.com/i.test(e)?"Weather":/smoot\.apple\.com/i.test(e)?"Siri":(/\.apple\.com/i.test(e),"Apple");let n=$.getjson(t,s),p=n?.Settings?.[i]||n?.Apple?.[i]||s.Settings[i];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(p,t)}return{Platform:i,Settings:p}}
+ async function setENV(t,i,e){const s=/weather-(.*)\.apple\.com/i.test(i)?"Weather":/smoot\.apple\.(com|cn)/i.test(i)?"Siri":(/\.apple\.com/i.test(i),"Apple");let n=$.getjson(t,e),a=n?.[s]||n?.Settings?.[s]||n?.Apple?.[s]||e[s];if("undefined"!=typeof $argument){let t=Object.fromEntries($argument.split("&").map((t=>t.split("="))));Object.assign(a,t)}return a.Switch=JSON.parse(a.Switch),"string"==typeof a?.Domains&&(a.Domains=a.Domains.split(",")),"string"==typeof a?.Functions&&(a.Functions=a.Functions.split(",")),a?.Safari_Smart_History&&(a.Safari_Smart_History=JSON.parse(a.Safari_Smart_History)),{Platform:s,Settings:a}}
 
 /**
  * Get Origin Parameter
