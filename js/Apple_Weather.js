@@ -330,7 +330,7 @@ async function ColorfulClouds(
 					 `${ input.token !== null ? input.token : "TAkhjf8d1nlSlspN" }/` +
 					 `${input.lng},${input.lat}/` +
 					 // https://docs.caiyunapp.com/docs/tables/unit/
-					 `weather?alert=true&dailysteps=1&hourlysteps=24&unit=metric:v2` +
+					 `weather?alert=true&dailysteps=1&hourlysteps=24&unit=SI` +
 					 `${ timestamp !== null ? `&begin=${timestamp}` : '' }`,
 					// TODO: detect language
 					//  `&lang=${ navigator.language }`,
@@ -461,7 +461,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			weather.forecastNextHour.metadata.providerName = obs?.attributions?.[0]?.name;
 			weather.forecastNextHour.metadata.readTime = convertTime(new Date(), 'remain', api);
 			// TODO
-			weather.forecastNextHour.metadata.units = "mm";
+			weather.forecastNextHour.metadata.units = "m";
 			weather.forecastNextHour.metadata.version = 2;
 
 			const addMinutes = (date, minutes) => (new Date()).setTime(date.getTime() + (1000 * 60 * minutes));
