@@ -444,15 +444,15 @@ async function outputData(api, now, obs, minutely, data, Settings) {
       if (!weather.forecastNextHour) {
         $.log(`⚠️ ${$.name}, non-existent forecastNextHour data`, `creating`, '');
         weather.forecastNextHour = {
+          "name": "NextHourForecast",
           "metadata": {
               "units": "m",
               "version": 2,
           },
-          "startTime": "",
           "condition": [],
+          "summary": [],
+          "startTime": "",
           "minutes": [],
-          "name": "NextHourForecast",
-          "summary": []
         }
       }
 
