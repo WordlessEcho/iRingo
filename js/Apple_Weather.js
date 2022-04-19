@@ -491,9 +491,9 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 				"condition": conditions.token,
 			};
 
-			if (Math.max(...probability) > 0) {
-				summaries.precipChance = parseInt(Math.max(...probability) * 100);
-				summaries.precipIntensity = parseFloat((Math.max(...precipitation_2h)).toFixed(2));
+			if (Math.max(...minutely.probability) > 0) {
+				summaries.precipChance = parseInt(Math.max(...minutely.probability) * 100);
+				summaries.precipIntensity = parseFloat((Math.max(...minutely.precipitation_2h)).toFixed(2));
 			}
 
 			weather.forecastNextHour.summary.push(summaries);
