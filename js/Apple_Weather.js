@@ -349,7 +349,7 @@ async function outputData(api, now, obs, data, Settings) {
 		};
 
 		summaries.precipChance = 100;
-		summaries.precipIntensity = 6;
+		summaries.precipIntensity = 4.13;
 
 		weather.forecastNextHour.summary.push(summaries);
 		weather.forecastNextHour.startTime = startTimeIos;
@@ -358,15 +358,14 @@ async function outputData(api, now, obs, data, Settings) {
 
 		for (let i = 0; i <= 120; i++) {
 			const nextMinuteTime = addMinutes(startTimeDate, i);
-			const value = parseInt(i / 20);
 
 			weather.forecastNextHour.minutes.push({
 				"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
 				// we only have per half hour probability data
 				// convert to percentages
 				"precipChance": 100,
-				"precipIntensity": value,
-				"precipIntensityPerceived": value,
+				"precipIntensity": 4.13,
+				"precipIntensityPerceived": 4.13,
 			});
 		};
 
