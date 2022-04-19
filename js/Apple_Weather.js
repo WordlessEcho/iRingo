@@ -350,8 +350,8 @@ async function outputData(api, now, obs, data, Settings) {
 			"condition": "rain",
 		};
 
-		summaries.precipChance = 100;
-		summaries.precipIntensity = 4.13;
+		summaries.precipChance = Settings?.Debug?.PrecipChance ?? 100;
+		summaries.precipIntensity = Settings?.Debug?.PrecipIntensity ?? 4.13;
 
 		weather.forecastNextHour.summary.push(summaries);
 		weather.forecastNextHour.startTime = startTimeIos;
@@ -365,9 +365,9 @@ async function outputData(api, now, obs, data, Settings) {
 				"startTime": convertTime(new Date(nextMinuteTime), 'remain', api),
 				// we only have per half hour probability data
 				// convert to percentages
-				"precipChance": 100,
-				"precipIntensity": 4.13,
-				"precipIntensityPerceived": 3.001,
+				"precipChance": Settings?.Debug?.PrecipChance ?? 100,
+				"precipIntensity": Settings?.Debug?.PrecipIntensity ?? 4.13,
+				"precipIntensityPerceived": Settings?.Debug?.PrecipIntensityPerceived ?? 3,
 			});
 		};
 
