@@ -529,7 +529,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 					return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
 				} else if (value < lightRainOrSnow.upper) {
 					return (
-						// multiple 1000 for precision of calculation
+						// multiple 10000 for precision of calculation
 						// base of previous levels + percentage of the value in its level
 						PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
 						((value - noRainOrSnow.upper) * DECIMALS_LENGTH) /
