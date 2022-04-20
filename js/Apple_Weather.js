@@ -293,7 +293,7 @@ async function outputData(api, now, obs, data, Settings) {
 		weather.airQuality.index = obs?.aqi ?? now?.aqi ?? now?.v;
 		weather.airQuality.scale = Settings?.Scale || "EPA_NowCast.2201";
 		weather.airQuality.categoryIndex = classifyAirQualityLevel(obs?.aqi ?? now?.aqi ?? now?.v);
-		weather.airQuality.metadata.providerLogo = "https:\/\/waqi.info\/images\/logo.png";
+		weather.airQuality.metadata.providerLogo = `https://s2.loli.net/2022/04/20/ruaYXvfqcBVt4N3.png`;
 		//weather.airQuality.metadata.providerName = obs?.attributions?.[obs.attributions.length - 1]?.name;
 		weather.airQuality.metadata.providerName = obs?.attributions?.[0]?.name;
 		weather.airQuality.metadata.expireTime = convertTime(new Date(obs?.time?.iso ?? now?.utime), 'add-1h-floor', api);
