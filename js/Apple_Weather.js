@@ -14,6 +14,7 @@ let { body } = $response;
 	const { Settings } = await setENV("iRingo", url, DataBase);
 	$.log(`🚧 ${$.name}, Settings = ${JSON.stringify(Settings)}`, "");
 	let data = JSON.parse(body);
+	$.log(`🚧 ${$.name}, data = ${JSON.stringify(data)}`, "");
 	if (/\/(v1|v2)\/weather\//.test(url)) {
 		const Status = await getStatus(data);
 		if (Status == true) {
