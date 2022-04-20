@@ -491,9 +491,9 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			};
 
 			// https://docs.caiyunapp.com/docs/tables/precip/
-			const HEAVY_RAIN_UPPER = 51.30;
+			// const HEAVY_RAIN_UPPER = 51.30;
 			// the limit of `precipIntensityPerceived`
-			const PERCEIVED_LIMIT = 3;
+			// const PERCEIVED_LIMIT = 3;
 			// TODO: is toFixed necessary?
 			// const toApplePrecipitation = value => parseFloat(
 			// 	((value * 10000 / (HEAVY_RAIN_UPPER * 1000)) * PERCEIVED_LIMIT)
@@ -501,54 +501,70 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			// );
 
 			// https://docs.caiyunapp.com/docs/tables/precip/
+			// const toApplePrecipitation = value => {
+			// 	const PRECIPITATION_RANGE = {
+			// 		noRainOrSnow: { lower: 0, upper: 0.08 },
+			// 		lightRainOrSnow: { lower: 0.08, upper:3.44 },
+			// 		moderateRainOrSnow: { lower: 3.44, upper: 11.33 },
+			// 		heavyRainOrSnow: { lower: 11.33, upper: 51.30 },
+			// 		stormRainOrSnow: { lower: 51.30, upper: Number.MAX_VALUE },
+			// 	};
+			// 	const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
+			// 		beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
+			// 	};
+			// 	const {
+			// 		noRainOrSnow,
+			// 		lightRainOrSnow,
+			// 		moderateRainOrSnow,
+			// 		heavyRainOrSnow,
+			// 		stormRainOrSnow
+			// 	} = PRECIPITATION_RANGE;
+
+			// 	if (value < noRainOrSnow.upper) {
+			// 		if (value < noRainOrSnow.lower) {
+			// 			$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`,'');
+			// 		}
+
+			// 		return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
+			// 	} else if (value < lightRainOrSnow.upper) {
+			// 		return (
+			// 			// multiple 1000 for precision of calculation
+			// 			// base of previous levels + percentage of the value in its level
+			// 			PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
+			// 			((value - noRainOrSnow.upper) * 1000) /
+			// 			((lightRainOrSnow.upper - lightRainOrSnow.lower) * 1000)
+			// 		);
+			// 	} else if (value < moderateRainOrSnow) {
+			// 		return (
+			// 			PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
+			// 			((value - lightRainOrSnow.upper) * 1000) /
+			// 			((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * 1000)
+			// 		);
+			// 	} else if (value < heavyRainOrSnow.upper) {
+			// 		return (
+			// 			PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
+			// 			((value - moderateRainOrSnow.upper) * 1000) /
+			// 			((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * 1000)
+			// 		);
+			// 	} else {
+			// 		return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
+			// 	}
+			// };
+
 			const toApplePrecipitation = value => {
-				const PRECIPITATION_RANGE = {
-					noRainOrSnow: { lower: 0, upper: 0.08 },
-					lightRainOrSnow: { lower: 0.08, upper:3.44 },
-					moderateRainOrSnow: { lower: 3.44, upper: 11.33 },
-					heavyRainOrSnow: { lower: 11.33, upper: 51.30 },
-					stormRainOrSnow: { lower: 51.30, upper: Number.MAX_VALUE },
-				};
-				const PRECIP_INTENSITY_PERCEIVED_DIVIDER = {
-					beginning: 0, levelBottom: 1, levelMiddle: 2, levelTop: 3,
-				};
-				const {
-					noRainOrSnow,
-					lightRainOrSnow,
-					moderateRainOrSnow,
-					heavyRainOrSnow,
-					stormRainOrSnow
-				} = PRECIPITATION_RANGE;
+				const DECIMALS_LENGTH = 1000;
+				const NO_RAIN_OR_SNOW_UPPER = 0.08
+				const HEAVY_RAIN_OR_SNOW_UPPER = 51.30;
 
-				if (value < noRainOrSnow.upper) {
-					if (value < noRainOrSnow.lower) {
-						$.log(`⚠️ ${$.name}, 降水强度不应为负值`, `minutely = ${JSON.stringify(minutely)}`,'');
-					}
-
-					return PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning;
-				} else if (value < lightRainOrSnow.upper) {
-					return (
-						// multiple 1000 for precision of calculation
-						// base of previous levels + percentage of the value in its level
-						PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
-						((value - noRainOrSnow.upper) * 1000) /
-						((lightRainOrSnow.upper - lightRainOrSnow.lower) * 1000)
-					);
-				} else if (value < moderateRainOrSnow) {
-					return (
-						PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
-						((value - lightRainOrSnow.upper) * 1000) /
-						((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * 1000)
-					);
-				} else if (value < heavyRainOrSnow.upper) {
-					return (
-						PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
-						((value - moderateRainOrSnow.upper) * 1000) /
-						((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * 1000)
-					);
-				} else {
-					return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
+				if (value > HEAVY_RAIN_OR_SNOW_UPPER) {
+					return 3;
 				}
+
+				if (value < NO_RAIN_OR_SNOW_UPPER) {
+					return 0;
+				}
+
+				return ((value * DECIMALS_LENGTH) / (HEAVY_RAIN_OR_SNOW_UPPER * DECIMALS_LENGTH)) * 3;
 			};
 
 			if (Math.max(...minutely.probability) > 0) {
