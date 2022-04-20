@@ -505,7 +505,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 				const DECIMALS_LENGTH = 10000;
 				const PRECIPITATION_RANGE = {
 					noRainOrSnow: { lower: 0, upper: 0.08 },
-					lightRainOrSnow: { lower: 0.08, upper:3.44 },
+					lightRainOrSnow: { lower: 0.08, upper: 3.44 },
 					moderateRainOrSnow: { lower: 3.44, upper: 11.33 },
 					heavyRainOrSnow: { lower: 11.33, upper: 51.30 },
 					stormRainOrSnow: { lower: 51.30, upper: Number.MAX_VALUE },
@@ -532,20 +532,20 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 						// multiple 10000 for precision of calculation
 						// base of previous levels + percentage of the value in its level
 						PRECIP_INTENSITY_PERCEIVED_DIVIDER.beginning +
-						((value - noRainOrSnow.upper) * DECIMALS_LENGTH) /
-						((lightRainOrSnow.upper - lightRainOrSnow.lower) * DECIMALS_LENGTH)
+						(((value - noRainOrSnow.upper) * DECIMALS_LENGTH) /
+						((lightRainOrSnow.upper - lightRainOrSnow.lower) * DECIMALS_LENGTH))
 					);
-				} else if (value < moderateRainOrSnow) {
+				} else if (value < moderateRainOrSnow.upper) {
 					return (
 						PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelBottom +
-						((value - lightRainOrSnow.upper) * DECIMALS_LENGTH) /
-						((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * DECIMALS_LENGTH)
+						(((value - lightRainOrSnow.upper) * DECIMALS_LENGTH) /
+						((moderateRainOrSnow.upper - moderateRainOrSnow.lower) * DECIMALS_LENGTH))
 					);
 				} else if (value < heavyRainOrSnow.upper) {
 					return (
 						PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelMiddle +
-						((value - moderateRainOrSnow.upper) * DECIMALS_LENGTH) /
-						((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * DECIMALS_LENGTH)
+						(((value - moderateRainOrSnow.upper) * DECIMALS_LENGTH) /
+						((heavyRainOrSnow.upper - heavyRainOrSnow.lower) * DECIMALS_LENGTH))
 					);
 				} else {
 					return PRECIP_INTENSITY_PERCEIVED_DIVIDER.levelTop;
