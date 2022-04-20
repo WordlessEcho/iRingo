@@ -552,7 +552,7 @@ async function outputData(api, now, obs, minutely, data, Settings) {
 			// };
 
 			const toApplePrecipitation = value => {
-				const DECIMALS_LENGTH = 1000;
+				const DECIMALS_LENGTH = 10000;
 				const NO_RAIN_OR_SNOW_UPPER = 0.08
 				const HEAVY_RAIN_OR_SNOW_UPPER = 51.30;
 
