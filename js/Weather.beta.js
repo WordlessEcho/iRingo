@@ -19,7 +19,6 @@ var { body } = $response;
 		const Params = await getParams(url.path);
 		let data = JSON.parse(body);
 		const Status = await getStatus(data);
-		$.log(`🚧 ${$.name}, data = ${JSON.stringify(data)}`, "");
 		// AQI
 		if (url.params?.include?.includes("air_quality") || url.params?.dataSets?.includes("airQuality")) {
 			if (Status == true) {
@@ -110,6 +109,7 @@ async function setENV(name, url, database) {
 async function getParams(path) {
 	const Regular = /^(?<ver>v1|v2)\/weather\/(?<language>[\w-_]+)\/(?<lat>-?\d+\.\d+)\/(?<lng>-?\d+\.\d+).*(?<countryCode>country=[A-Z]{2})?.*/i;
 	const Params = path.match(Regular).groups;
+	// TODO: add debug switch (lat, lng)
 	$.log(`🚧 ${$.name}`, `Params: ${JSON.stringify(Params)}`, "");
 	return Params
 };
@@ -122,7 +122,7 @@ async function getParams(path) {
  */
 async function getStatus(data) {
 	const result = ["和风天气", "QWeather"].includes(data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName ?? "QWeather");
-	$.log(`🚧 ${$.name}, ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
+	$.log(`🚧 ${$.name}, providerName = ${data.air_quality?.metadata?.provider_name ?? data.airQuality?.metadata?.providerName}`, '');
 	return (result || false)
 };
 
@@ -134,11 +134,13 @@ async function getStatus(data) {
  * @return {Promise<*>}
  */
 async function WAQI(type = "", input = {}) {
+	// TODO: add debug switch (lat, lng)
 	$.log(`⚠ ${$.name}, WAQI`, `input: ${JSON.stringify(input)}`, "");
 	// 构造请求
 	let request = await GetRequest(type, input);
 	// 发送请求
 	let output = await GetData(type, request);
+	// TODO: add debug switch (geo)
 	$.log(`🚧 ${$.name}, WAQI`, `output: ${JSON.stringify(output)}`, "");
 	return output
 	/***************** Fuctions *****************/
@@ -232,7 +234,8 @@ async function WAQI(type = "", input = {}) {
 								var name = station?.name ?? station?.u ?? station?.nna ?? station?.nlo ?? null;
 								var aqi = station?.aqi ?? station?.v ?? null;
 								var distance = station?.distance ?? station?.d ?? null;
-								//var country = station?.cca2 ?? station?.country ?? null;
+								// var country = station?.cca2 ?? station?.country ?? null;
+								// TODO: add debug switch (distance)
 								$.log(`🎉 ${$.name}, GetData:${type}完成`, `idx: ${idx}`, `观测站: ${name}`, `AQI: ${aqi}`, `距离: ${distance}`, '')
 								resolve({ station, idx })
 							}
@@ -320,7 +323,7 @@ function getGridWeatherMinutely(lat, lng) {
  * @return {Promise<*>}
  */
 async function outputAQI(api, now, obs, weather, Settings) {
-	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQ data ${api}`, '');
+	$.log(`⚠️ ${$.name}, ${outputAQI.name}检测`, `AQI data ${api}`, '');
 	const AQIname = (api == "v1") ? "air_quality"
 		: (api == "v2") ? "airQuality"
 			: "airQuality";
@@ -566,6 +569,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 		let isRain = minutes[0].precipIntensity > 0;
 		let summary = {
 			startTime: minutes[0].startTime,
+			// I guess data from weatherType is not always reliable
 			condition: isRain ? weatherType : "clear",
 		};
 
@@ -574,7 +578,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 			// drop useless data to avoid display empty graph
 			if (i > DISPLAYABLE_MINUTES && lastIndex === 0 && !isRain) {
 				summaries.push(summary);
-				break;
+				return summaries;
 			}
 
 			const { startTime, precipIntensity } = minutes[i];
@@ -592,6 +596,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
+					isRain = !isRain;
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
@@ -604,6 +609,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 
 					summaries.push(summary);
 
+					isRain = !isRain;
 					lastIndex = i;
 					summary = {
 						startTime: startTime,
@@ -637,7 +643,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.endTime = value.endTime;
 					}
 					// TODO: heavy rain
-					condition.token = `${getWeatherType(minutelyData?.result?.hourly)}.constant`;
+					condition.token = `${value.condition}.constant`;
 					condition.longTemplate =
 						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
 					condition.shortTemplate = minutelyData?.result?.minutely?.description;
@@ -655,7 +661,7 @@ async function outputNextHour(api, minutelyData, weather, Settings) {
 						condition.endTime = value.endTime;
 					}
 					// TODO: we know less about the token
-					condition.token = `${getWeatherType(minutelyData?.result?.hourly)}.constant`;
+					condition.token = `${value.condition}.constant`;
 					condition.longTemplate =
 						minutelyData?.result?.forecast_keypoint ?? minutelyData?.result?.minutely?.description;
 					condition.shortTemplate = minutelyData?.result?.minutely?.description;
