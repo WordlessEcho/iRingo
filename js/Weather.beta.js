@@ -19,6 +19,7 @@ var { body } = $response;
 		const Params = await getParams(url.path);
 		let data = JSON.parse(body);
 		const Status = await getStatus(data);
+		$.log(`🚧 ${$.name}, data = ${JSON.stringify(data)}`, "");
 		// AQI
 		if (url.params?.include?.includes("air_quality") || url.params?.dataSets?.includes("airQuality")) {
 			if (Status == true) {
